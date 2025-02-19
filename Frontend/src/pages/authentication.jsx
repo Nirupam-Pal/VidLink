@@ -19,8 +19,6 @@ import { AuthContext } from "../contexts/AuthContext";
 const defaultTheme = createTheme();
 
 export default function Authentication() {
-
-
   const [username, setUsername] = React.useState();
   const [password, setPassword] = React.useState();
   const [name, setName] = React.useState();
@@ -31,37 +29,36 @@ export default function Authentication() {
 
   const [open, setOpen] = React.useState(false);
 
-  const {handleRegister, handleLogin} = React.useContext(AuthContext)
+  const { handleRegister, handleLogin } = React.useContext(AuthContext);
 
-  let handleAuth = async() =>{
-    try{
-      if(formState === 0){
-
-        let result = await handleLogin(username, password)
+  let handleAuth = async () => {
+    try {
+      if (formState === 0) {
+        let result = await handleLogin(username, password);
         console.log(result);
         setMessage(result);
         setOpen(true);
         setError("");
         setFromState(0);
-        setPassword("")
-        setUsername("")
-
-      }if(formState === 1){
-        let result  = await handleRegister(name, username, password);
-        console.log(result);
-        setMessage(result);
-        setOpen(true);
-        setError("");
-        setFromState(0);
-        setPassword("")
-        setUsername("")
-        setName("")
+        setPassword("");
+        setUsername("");
       }
-    }catch(err){
-      let message = (err.response.data.message);
+      if (formState === 1) {
+        let result = await handleRegister(name, username, password);
+        console.log(result);
+        setMessage(result);
+        setOpen(true);
+        setError("");
+        setFromState(0);
+        setPassword("");
+        setUsername("");
+        setName("");
+      }
+    } catch (err) {
+      let message = err.response.data.message;
       setError(message);
     }
-  }
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -98,29 +95,42 @@ export default function Authentication() {
               <LockOutlinedIcon />
             </Avatar>
 
-
             <div>
-              <Button variant={formState === 0 ? "contained": ""} onClick={() => {setFromState(0)}}>
+              <Button
+                variant={formState === 0 ? "contained" : ""}
+                onClick={() => {
+                  setFromState(0);
+                }}
+              >
                 Sign In
               </Button>
-              <Button variant={formState === 1 ? "contained" : ""} onClick={()=> {setFromState(1)}}>
+              <Button
+                variant={formState === 1 ? "contained" : ""}
+                onClick={() => {
+                  setFromState(1);
+                }}
+              >
                 Sign Up
               </Button>
             </div>
 
             <Box component="form" noValidate sx={{ mt: 1 }}>
-              {formState === 1 ? <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="fullname"
-                label="Full name"
-                name="fullname"
-                value={name}
-                autoFocus
-                onChange={(e) => setName(e.target.value)}
-              /> : <></>}
-              
+              {formState === 1 ? (
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="fullname"
+                  label="Full name"
+                  name="fullname"
+                  value={name}
+                  autoFocus
+                  onChange={(e) => setName(e.target.value)}
+                />
+              ) : (
+                <></>
+              )}
+
               <TextField
                 margin="normal"
                 required
@@ -130,7 +140,7 @@ export default function Authentication() {
                 name="username"
                 value={username}
                 autoFocus
-                onChange={(e)=> setUsername(e.target.value)}
+                onChange={(e) => setUsername(e.target.value)}
               />
               <TextField
                 margin="normal"
@@ -141,9 +151,9 @@ export default function Authentication() {
                 value={password}
                 type="password"
                 id="password"
-                onChange={(e)=> setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
-              <p style={{color: "red"}}>{error}</p>
+              <p style={{ color: "red" }}>{error}</p>
               <Button
                 type="button"
                 fullWidth
@@ -158,12 +168,7 @@ export default function Authentication() {
         </Grid>
       </Grid>
 
-
-                    <Snackbar
-                    open={open}
-                    autoHideDuration={4000}
-                    message={message}
-                    />
+      <Snackbar open={open} autoHideDuration={4000} message={message} />
     </ThemeProvider>
   );
 }
